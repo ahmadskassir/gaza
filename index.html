@@ -96,8 +96,9 @@
     }
 
     video {
-        max-width: 100%;
-        max-height: auto;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
         margin-bottom: 10px;
     }
 
@@ -280,19 +281,16 @@
                         data-id="${doc.id}"
                         data-name="${video.title}"
                         data-image="${video.source}">
-                <video controls>
-                    <source src="${video.source}" type="video/mp4">
-                </video>
-                        <p>${video .title}</p>
+                        <video controls>
+                            <source src="${video.source}" type="video/mp4">
+                        </video>
+                        <p>${video.title}</p>
                     </div>
                 `;
             });
 
             videoContainer.innerHTML = videoHTML || '<p>لم يتم العثور على صور</p>';
         }
-
-
-        
 
         document.getElementById('show-images').addEventListener('click', function() {
             document.getElementById('images').style.display = 'block';
@@ -309,7 +307,7 @@
             loadSpecialties();
             loadvideos();
         };
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
