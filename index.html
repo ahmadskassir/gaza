@@ -150,6 +150,64 @@
             font-size: 1em;
         }
     }
+   .contact-section {
+        padding: 20px;
+        background-color: #f5f5f5;
+        border-top: 2px solid #830000;
+        direction: rtl;
+    }
+    
+    .contact-form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group file {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    
+    .form-group textarea {
+        height: 100px;
+    }
+    
+    .submit-btn {
+        background-color: #a70000;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .submit-btn:hover {
+        background-color: #6e0000;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-section {
+            padding: 15px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            font-size: 14px;
+        }
+    }
     </style>
 
     <script type="module">
@@ -221,6 +279,31 @@
             loadTexts();
             loadSpecialties();
         };
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('https://formspree.io/f/mvojnzqr', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('تم إرسال الرسالة بنجاح!');
+                    this.reset();
+                } else {
+                    alert('حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقًا.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقًا.');
+            });
+        });
     </script>
 </head>
 
@@ -253,6 +336,34 @@
                 </video>
             </div>
         </div>
+    </div>
+
+<div class="contact-section">
+        <form id="contactForm" class="contact-form">
+            <h2>أرسل رسالة دعم</h2>
+            
+            <div class="form-group">
+                <label for="name">الاسم الكامل:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="title">عنوان الرسالة:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">نص الرسالة:</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">إرفاق صورة (اختياري):</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            
+            <button type="submit" class="submit-btn">إرسال الرسالة</button>
+        </form>
     </div>
 </body>
 </html>
