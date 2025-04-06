@@ -265,6 +265,35 @@
             photoContainer.innerHTML = photoHTML || '<p>لم يتم العثور على صور</p>';
         }
 
+
+        async function loadvideos() {
+            const videoContainer = document.getElementById("videoContainer");
+            videoContainer.innerHTML = '<p>جار التحميل...</p>';
+            
+            const querySnapshot = await getDocs(collection(db, "video"));
+            let videoHTML = '';
+            
+            querySnapshot.forEach((doc) => {
+                const photo = doc.data();
+                videoHTML += `
+                    <div 
+                        data-id="${doc.id}"
+                        data-name="${video.title}"
+                        data-image="${video.source}">
+                <video controls>
+                    <source src="${video.source}" type="video/mp4">
+                </video>
+                        <p>${video .title}</p>
+                    </div>
+                `;
+            });
+
+            videoContainer.innerHTML = videoHTML || '<p>لم يتم العثور على صور</p>';
+        }
+
+
+        
+
         document.getElementById('show-images').addEventListener('click', function() {
             document.getElementById('images').style.display = 'block';
             document.getElementById('videos').style.display = 'none';
@@ -278,6 +307,7 @@
         window.onload = function() {
             loadTexts();
             loadSpecialties();
+            loadvideos();
         };
 document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -326,14 +356,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
             </div>
             <div id="videos" class="content" style="display: none;">
                 <h2>قسم الفيديوهات</h2>
-                <video controls>
-                    <source src="video1.mp4" type="video/mp4">
-                    متصفحك لا يدعم عنصر الفيديو.
-                </video>
-                <video controls>
-                    <source src="video2.mp4" type="video/mp4">
-                    متصفحك لا يدعم عنصر الفيديو.
-                </video>
+                <div id="videoContainer"></div>
             </div>
         </div>
     </div>
