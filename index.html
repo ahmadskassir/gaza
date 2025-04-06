@@ -10,12 +10,24 @@
         font-family: Arial, sans-serif;
         direction: rtl;
     }
-.header { font-size:15px; display: flex; align-items: center; padding: 20px; background: linear-gradient(90deg, #830000, #a70000); 
-border-bottom: 2px solid #830000; color: #a70000 } 
-.title { color:white; }
+    .header { 
+        font-size:15px; 
+        display: flex; 
+        align-items: center; 
+        padding: 15px;
+        background: linear-gradient(90deg, #830000, #a70000); 
+        border-bottom: 2px solid #830000; 
+        color: #a70000; 
+    } 
+    .title { 
+        color:white;
+        margin: 0;
+        font-size: 1.2em;
+    }
     .container {
         height: 100vh;
         display: flex;
+        flex-direction: row;
     }
 
     .sidebar {
@@ -23,6 +35,7 @@ border-bottom: 2px solid #830000; color: #a70000 }
         background-color: #f0f0f0;
         overflow: hidden;
         position: relative;
+        flex-shrink: 0;
     }
 
     .text-container {
@@ -35,36 +48,35 @@ border-bottom: 2px solid #830000; color: #a70000 }
     .text-container p {
         margin: 0;
         padding: 10px;
-        word-wrap: break-word; /* يسمح بتقسيم الكلمات الطويلة */
-        overflow-wrap: break-word; /* بديل لـ word-wrap */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     @keyframes scroll-text {
-        0% {
-            transform: translateY(0);
-        }
-        100% {
-            transform: translateY(-50%);
-        }
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
     }
 
     .main-content {
         flex: 1;
         padding: 20px;
+        overflow-y: auto;
     }
 
     .buttons {
         margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
     }
 
     button {
         padding: 10px 20px;
-        margin-left: 10px;
         cursor: pointer;
         background-color: #a70000;
         color: white;
         border: none;
         border-radius: 5px;
+        flex: 1;
     }
 
     button:hover {
@@ -73,28 +85,74 @@ border-bottom: 2px solid #830000; color: #a70000 }
 
     .content {
         border: 1px solid #ccc;
-        padding: 20px;
+        padding: 15px;
+        margin-bottom: 20px;
     }
 
     #photoContainer {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 10px;
     }
 
     video {
-        max-width: 100%;
+        width: 100%;
         height: auto;
         margin-bottom: 10px;
     }
 
     img {
-        max-width: 250px;
+        width: 100%;
+        height: auto;
         max-height: 250px;
-        margin-bottom: 10px;
+        object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+            height: auto;
+        }
+        
+        .sidebar {
+            width: 100%;
+            height: 200px;
+            flex-shrink: 0;
+        }
+        
+        .text-container {
+            width: 100%;
+        }
+        
+        .main-content {
+            padding: 15px;
+            overflow: visible;
+        }
+        
+        .buttons {
+            flex-direction: column;
+        }
+        
+        button {
+            width: 100%;
+            margin: 5px 0;
+        }
+        
+        #photoContainer {
+            grid-template-columns: 1fr;
+        }
+        
+        .header {
+            padding: 10px;
+        }
+        
+        .title {
+            font-size: 1em;
+        }
     }
     </style>
 
+    <!-- باقي الكود من سكريبت Firebase يبقى كما هو -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -103,7 +161,7 @@ border-bottom: 2px solid #830000; color: #a70000 }
             apiKey: "AIzaSyA_8I3TTKFl-5KYnhk4K_OrzqzzymzmhqU",
             authDomain: "test-test-313.firebaseapp.com",
             projectId: "test-test-313",
-            storageBucket: "test-test-313.firebasestorage.app",
+            storageBucket: "test-test-313.appspot.com",
             messagingSenderId: "926344113742",
             appId: "1:926344113742:web:1ace941af9bd92eebedd1f",
             measurementId: "G-NCC8S9Z7NX"
@@ -114,13 +172,7 @@ border-bottom: 2px solid #830000; color: #a70000 }
 
         async function loadTexts() {
             const textContainer = document.getElementById("textContainer");
-            
-            if (!textContainer) {
-                console.error("Element with ID 'textContainer' not found");
-                return;
-            }
-
-            textContainer.innerHTML = '<p>Loading...</p>';
+            textContainer.innerHTML = '<p>جار التحميل...</p>';
             
             const querySnapshot = await getDocs(collection(db, "texts"));
             let textHTML = '';
@@ -135,13 +187,7 @@ border-bottom: 2px solid #830000; color: #a70000 }
 
         async function loadSpecialties() {
             const photoContainer = document.getElementById("photoContainer");
-            
-            if (!photoContainer) {
-                console.error("Element with ID 'photoContainer' not found");
-                return;
-            }
-
-            photoContainer.innerHTML = '<p>Loading...</p>';
+            photoContainer.innerHTML = '<p>جار التحميل...</p>';
             
             const querySnapshot = await getDocs(collection(db, "image"));
             let photoHTML = '';
@@ -181,8 +227,7 @@ border-bottom: 2px solid #830000; color: #a70000 }
 
 <body>
 <div class="header">
-<h2 align="center" class="title">فلو أن امرأ مسلما مات من بعد هذا أسفا ما كان به ملوما بل كان به عندي جديرا
-</h2>
+<h2 class="title">فلو أن امرأ مسلما مات من بعد هذا أسفا ما كان به ملوما بل كان به عندي جديرا</h2>
 </div>
     <div class="container">
         <div class="sidebar">
