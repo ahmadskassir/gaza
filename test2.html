@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gaza under attack</title>
+    <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        direction: rtl;
+    }
+.header { font-size:15px; display: flex; align-items: center; padding: 20px; background: linear-gradient(90deg, #830000, #a70000); 
+border-bottom: 2px solid #830000; color: #a70000 } 
+.title { color:white; } 
+    .container {
+        height: 100vh;
+        display: flex;
+    }
+
+    .sidebar {
+        width: 200px;
+        background-color: #f0f0f0;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .text-container {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        animation: scroll-text 15s linear infinite;
+    }
+
+    .text-container p {
+        margin: 0;
+        padding: 10px;
+        white-space: nowrap;
+    }
+
+    @keyframes scroll-text {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(-50%);
+        }
+    }
+
+    .main-content {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .buttons {
+        margin-bottom: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin-left: 10px;
+        cursor: pointer;
+        background-color: #a70000;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #6e0000;
+    }
+
+    .content {
+        border: 1px solid #ccc;
+        padding: 20px;
+    }
+
+    #photoContainer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    video {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    img {
+        max-width: 250px;
+        max-height: 250px;
+        margin-bottom: 10px;
+    }
+    </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_8I3TTKFl-5KYnhk4K_OrzqzzymzmhqU",
+            authDomain: "test-test-313.firebaseapp.com",
+            projectId: "test-test-313",
+            storageBucket: "test-test-313.firebasestorage.app",
+            messagingSenderId: "926344113742",
+            appId: "1:926344113742:web:1ace941af9bd92eebedd1f",
+            measurementId: "G-NCC8S9Z7NX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadSpecialties() {
+            const photoContainer = document.getElementById("photoContainer");
+            
+            if (!photoContainer) {
+                console.error("Element with ID 'photoContainer' not found");
+                return;
+            }
+
+            photoContainer.innerHTML = '<p>Loading...</p>';
+            
+            const querySnapshot = await getDocs(collection(db, "image"));
+            let photoHTML = '';
+            
+            querySnapshot.forEach((doc) => {
+                const photo = doc.data();
+                photoHTML += `
+                    <div 
+                        data-id="${doc.id}"
+                        data-name="${photo.title}"
+                        data-image="${photo.source}">
+                        <img src="${photo.source}" alt="${photo.title}">
+                        <p>${photo.title}</p>
+                    </div>
+                `;
+            });
+
+            photoContainer.innerHTML = photoHTML || '<p>لم يتم العثور على صور</p>';
+        }
+
+        document.getElementById('show-images').addEventListener('click', function() {
+            document.getElementById('images').style.display = 'block';
+            document.getElementById('videos').style.display = 'none';
+        });
+
+        document.getElementById('show-videos').addEventListener('click', function() {
+            document.getElementById('images').style.display = 'none';
+            document.getElementById('videos').style.display = 'block';
+        });
+
+        window.onload = function() {
+            loadSpecialties();
+        };
+    </script>
+</head>
+
+<body>
+<div class="header">
+<h2 align="center" class="title">فلو أن امرأ مسلما مات من بعد هذا أسفا ما كان به ملوما بل كان به عندي جديرا</h2>
+</div>
+    <div class="container">
+        <div class="sidebar">
+            <div class="text-container">
+                <p>نص تجريبي 1</p>
+                <p>نص تجريبي 2</p>
+                <p>نص تجريبي 3</p>
+                <p>نص تجريبي 4</p>
+                <p>نص تجريبي 5</p>
+                <p>نص تجريبي 6</p>
+                <p>نص تجريبي 7</p>
+                <p>نص تجريبي 8</p>
+                <p>نص تجريبي 1</p>
+                <p>نص تجريبي 2</p>
+                <p>نص تجريبي 3</p>
+                <p>نص تجريبي 4</p>
+                <p>نص تجريبي 5</p>
+                <p>نص تجريبي 6</p>
+                <p>نص تجريبي 7</p>
+                <p>نص تجريبي 8</p>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="buttons">
+                <button id="show-images">الصور</button>
+                <button id="show-videos">الفيديوهات</button>
+            </div>
+            <div id="images" class="content">
+                <h2>قسم الصور</h2>
+                <div id="photoContainer"></div>
+            </div>
+            <div id="videos" class="content" style="display: none;">
+                <h2>قسم الفيديوهات</h2>
+                <video controls>
+                    <source src="video1.mp4" type="video/mp4">
+                    متصفحك لا يدعم عنصر الفيديو.
+                </video>
+                <video controls>
+                    <source src="video2.mp4" type="video/mp4">
+                    متصفحك لا يدعم عنصر الفيديو.
+                </video>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
